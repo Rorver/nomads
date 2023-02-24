@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title')</title>
 
-    @method('prepend-style')
+    @stack('prepend-style')
     @include('includes.link')
-    @method('addon-style')
+    @stack('addon-style')
 </head>
 <body>
     <!--Navbar-->
@@ -21,8 +21,8 @@
     @include('includes.footer')
 
     <!--Script-->
-    @method('prepend-script')
+    @stack('prepend-script')
     @include('includes.scripts')
-    @method('addon-script')
+    @stack('addon-script')
 </body>
 </html>
