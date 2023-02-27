@@ -121,7 +121,8 @@
                 </div>
                 <div class="join-container">
                     @auth
-                        <form action="" method="POST">
+                        <form action="{{ route('checkout_proses', $item -> id)}}" method="POST">
+                            @csrf
                             <button class="btn d-grid gap-2 mx-auto btn-join-now mt-3 my-2" type="submit">
                                 Join Now
                             </button>

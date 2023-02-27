@@ -27,11 +27,11 @@ Route::get('/', [HomeController::class, 'index'])
 Route::get('/detail/{slug}', [DetailController::class, 'index'])
     -> name('detail');
 
-Route::post('/checkout/{id}', [CheckoutController::class, 'process'])
+Route::post('/checkout/{id}', [CheckoutController::class, 'proses'])
     -> name('checkout_proses')
     -> middleware(['auth', 'verified']);
 
-Route::post('/checkout/{id}', [CheckoutController::class, 'index'])
+Route::get('/checkout/{id}', [CheckoutController::class, 'index'])
     -> name('checkout')
     -> middleware(['auth', 'verified']);
 
@@ -39,11 +39,11 @@ Route::post('/checkout/create/{detail_id}', [CheckoutController::class, 'create'
     -> name('checkout_create')
     -> middleware(['auth', 'verified']);
 
-Route::post('/checkout/remove/{detail_id}', [CheckoutController::class, 'remove'])
+Route::get('/checkout/remove/{detail_id}', [CheckoutController::class, 'remove'])
     -> name('checkout_remove')
     -> middleware(['auth', 'verified']);
 
-Route::post('/checkout/confirm/{id}', [CheckoutController::class, 'success'])
+Route::get('/checkout/confirm/{id}', [CheckoutController::class, 'success'])
     -> name('checkout_success')
     -> middleware(['auth', 'verified']);
 

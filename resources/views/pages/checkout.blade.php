@@ -28,100 +28,100 @@
                 <div class="row">
                 <div class="col-lg-8 pl-lg-0">
                     <div class="card card-details">
-                    <h1>Who is going ?</h1>
-                    <P>
-                        Trip to Ubud, Bali, Indonesia
-                    </P>
-                    <div class="attendee">
-                        <table class="table table-responesive-sm text-center">
-                        <thead class="table-group-divider">
-                            <tr>
-                            <td>Picture</td>
-                            <td>Name</td>
-                            <td>Nationality</td>
-                            <td>VISA</td>
-                            <td>Passport</td>
-                            <td> </td>
-                            </tr>
-                        </thead>
-                        <tbody class="table-group-divider">
-                            <tr>
-                            <td>
-                                <img src="{{ url('FrontEnd/images/profileuser1.jpg')}}" height="60" alt="">
-                            </td>
-                            <td class="align-middle">
-                                Angga Risky
-                            </td>
-                            <td class="align-middle">
-                                CN
-                            </td>
-                            <td class="align-middle">
-                                N/A
-                            </td>
-                            <td class="align-middle">
-                                Active
-                            </td>
-                            <td class="align-middle">
-                                <a href="#">
-                                <img src="{{ url('FrontEnd/images/ic_remove.png')}}" alt="">
-                                </a>
-                            </td>
-                            </tr>
-                            <tr>
-                            <td>
-                                <img src="{{ url('FrontEnd/images/profileuser2.jpg')}}" height="60" alt="">
-
-                            </td>
-                            <td class="align-middle">
-                                Galih Pratama
-                            </td>
-                            <td class="align-middle">
-                                SG
-                            </td>
-                            <td class="align-middle">
-                                30 Days
-                            </td>
-                            <td class="align-middle">
-                                Active
-                            </td>
-                            <td class="align-middle table-group-remove">
-                                <a href="#">
-                                <img src="{{ url('FrontEnd/images/ic_remove.png')}}" alt="">
-                                </a>
-                            </td>
-                            </tr>
-                        </tbody>
-                        </table>
+                        @if ($errors -> any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors -> all() as $error )
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                        <h1>Who is going ?</h1>
+                        <P>
+                            Trip to {{ $item -> travel_package -> title}}, {{ $item -> travel_package -> location}}
+                        </P>
+                        <div class="attendee">
+                            <table class="table table-responesive-sm text-center">
+                                <thead class="table-group-divider">
+                                    <tr>
+                                    <td>Picture</td>
+                                    <td>Name</td>
+                                    <td>Nationality</td>
+                                    <td>VISA</td>
+                                    <td>Passport</td>
+                                    <td> </td>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-group-divider">
+                                    @forelse ($item -> details as $detail)
+                                        <tr>
+                                            <td>
+                                                <img src="https://ui-avatars.com/api/?name={{ $detail -> username }}" height="60" alt="" class="rounded-circle">
+                                            </td>
+                                            <td class="align-middle">
+                                                {{ $detail -> username }}
+                                            </td>
+                                            <td class="align-middle">
+                                                {{ $detail -> nationality }}
+                                            </td>
+                                            <td class="align-middle">
+                                                {{ $detail -> is_visa ? '30 Days' : 'N/A' }}
+                                            </td>
+                                            <td class="align-middle">
+                                                {{ \Carbon\Carbon::createFromDate($detail -> doe_passport) > \Carbon\Carbon::now() ? 'Active' : 'Inactive'}}
+                                            </td>
+                                            <td class="align-middle">
+                                                <a href="{{ route('checkout_remove', $detail -> id) }}">
+                                                <img src="{{ url('FrontEnd/images/ic_remove.png')}}" alt="">
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="6" class="text-center">
+                                                No Visitor
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
                     </div>
                     <div class="member mt-3">
                         <h2>Add Member</h2>
-                        <form action="" class="row row-cols-lg-auto g-3 align-items-center">
-                        <div class="col-12">
-                            <label for="inputUsername" class="visually-hidden">Name</label>
-                            <input name="inputUsername" type="text" class="form-control mb-2 me-sm-2" id="inputUsername" placeholder="Username">
-                        </div>
-
-                        <div class="col-12">
-                            <label for="inputVisa" class="visually-hidden">Visa</label>
-                            <select name="inputVisa" id="inputVisa" class="form-select mb-2 me-sm-2">
-                            <Option value="VISA" selected>VISA</Option>
-                            <Option value="30 Days">30 Days</Option>
-                            <Option value="N/A">N/A</Option>
-                            </select>
-                        </div>
-
-                        <div class="col-12">
-                            <label for="doePassport" class="visually-hidden">Doe Passport</label>
-                            <div class="input-group mb-2 me-sm-2">
-                                <input type="text" class="form-control datepicker" id="doePassport" placeholder="DOE Passport">
+                        <form class="row row-cols-lg-auto g-3 align-items-center" method="POST" action="{{ route('checkout_create', $item -> id)}}">
+                            @csrf
+                            <div class="col-12">
+                                <label for="username" class="visually-hidden">Name</label>
+                                <input name="username" type="text" class="form-control mb-2 me-sm-2" id="username" placeholder="Username" required>
                             </div>
-                        </div>
 
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-add-now mb-2 px-4">
-                            Add Now
-                            </button>
-                        </div>
+                            <div class="col-12">
+                                <label for="nationality" class="visually-hidden">Nationality</label>
+                                <input name="nationality" type="text" class="form-control mb-2 me-sm-2" style="width: 50px" id="nationality" required placeholder="Nationality">
+                            </div>
+
+                            <div class="col-12">
+                                <label for="is_visa" class="visually-hidden">Visa</label>
+                                <select name="is_visa" id="is_visa" class="form-select mb-2 me-sm-2" required>
+                                    <Option value="" selected hidden>VISA</Option>
+                                    <Option value="1">30 Days</Option>
+                                    <Option value="0">N/A</Option>
+                                </select>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="doe_passport" class="visually-hidden">Doe Passport</label>
+                                <div class="input-group mb-2 me-sm-2">
+                                    <input type="text" name="doe_passport" class="form-control datepicker" id="doePassport" placeholder="DOE Passport">
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-add-now mb-2 px-4">
+                                    Add Now
+                                </button>
+                            </div>
                         </form>
                         <h3 class="mt-2 mb-0">Note</h3>
                         <p class="disclaimer mb-0">
@@ -138,32 +138,32 @@
                         <tr>
                         <th width="50%">Members</th>
                         <td width="50%" class="text-right">
-                            2 person
+                            {{ $item -> details -> count() }} person
                         </td>
                         </tr>
                         <tr>
                         <th width="50%">Additional VISA</th>
                         <td width="50%" class="text-right">
-                            $ 190,00
+                            $ {{ $item -> additional_visa }},00
                         </td>
                         </tr>
                         <tr>
                         <th width="50%">Trip Price</th>
                         <td width="50%" class="text-right">
-                            $ 80,00 / person
+                            $ {{ $item -> travel_package -> price}},00 / person
                         </td>
                         </tr>
                         <tr>
                         <th width="50%">Sub Total</th>
                         <td width="50%" class="text-right">
-                            $ 280,00
+                            $ {{ $item -> transactions_total }},00
                         </td>
                         </tr>
                         <tr>
                         <th width="50%">Total (+Unique Code)</th>
                         <td width="50%" class="text-right text-total">
-                            <Span class="text-blue">$ 279,</Span>
-                            <span class="text-orange">33</span>
+                            <Span class="text-blue">$ {{ $item -> transactions_total}},</Span>
+                            <span class="text-orange">{{ mt_rand(0,99) }}</span>
                         </td>
                         </tr>
                     </table>
@@ -200,12 +200,12 @@
                     </div>
                     </div>
                     <div class="join-container">
-                    <a href="{{ route('success')}}" class="btn d-grid gap-2 btn-join-now mt-3 my-2">
+                    <a href="{{ route('checkout_success', $item -> id)}}" class="btn d-grid gap-2 btn-join-now mt-3 my-2">
                         I Have Made Payment
                     </a>
                     </div>
                     <div class="text-center mt-3">
-                    <a href="{{ route('detail')}}" class="text-muted">
+                    <a href="{{ route('detail', $item -> travel_package -> slug)}}" class="text-muted">
                         Cancel Booking
                     </a>
                 </div>
@@ -225,11 +225,12 @@
     <script>
     $(document).ready(function () {
         $('.datepicker').datepicker({
-        uiLibrary: 'bootstrap5',
-        icons: {
-            rightIcon: '<img src="{{ url('FrontEnd/images/ic_doe.png')}}"/>'
-         }
-        })
+            format: 'yyyy-mm-dd',
+            uiLibrary: 'bootstrap5',
+            icons: {
+                rightIcon: '<img src="{{ url('FrontEnd/images/ic_doe.png')}}"/>'
+                }
+            })
     });
     </script>
 @endpush
