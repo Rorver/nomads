@@ -389,4 +389,38 @@ body .section-details-content .gj-datepicker .btn {
 .section-success .btn-home-page:hover {
   background-color: #0c2f81;
   color: #fff;
+}
+
+@media (min-width: 992px) {
+  .login-container {
+    background: linear-gradient(90deg, #fff 60%, #E4E6EB 40%);
+    width: 100vw;
+    height: 100vh;
+  }
+}
+
+.page-login {
+  height: 100vh;
+}
+.page-login .btn-login {
+  background-color: #f88329;
+  color: #fff;
+}
+.page-login .btn-loginhover {
+  color: #fff;
+}
+.page-login .section-left h1 {
+  font-family: "PlayFair Display";
+  font-weight: bold;
+  font-size: 50px;
+  text-align: left;
+  color: #071C4D;
+}
+.page-login .section-right a {
+  font-family: Assistant;
+  font-weight: 300;
+  text-decoration: underline;
+  font-size: 16px;
+  text-align: center;
+  color: #bfbfbf;
 }/*# sourceMappingURL=maincss.css.map */
